@@ -42,7 +42,7 @@ public class JwtService {
                 .builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 48))
+                .setExpiration(new Date(System.currentTimeMillis() + 1))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -93,6 +93,22 @@ public class JwtService {
     }
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+    public String extractEmailFromToken(String refreshToken) {
+        try {
+            return extractClaim(refreshToken, Claims::getSubject);
+        } catch (Exception e) {
+            throw new TokenRenewalException("Impossible d'extraire l'e-mail du refresh token.");
+        }
+    }
+
+    public boolean isRefreshTokenValid(String refreshToken) {
+        try {
+            Date expiration = extractExpiration(refreshToken);
+            return !expiration.before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

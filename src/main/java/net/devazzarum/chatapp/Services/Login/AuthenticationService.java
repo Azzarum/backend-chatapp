@@ -58,12 +58,29 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .nom(user.getNom())
+                .phone(user.getPhone())
                 .isAuthenticated(true)
                 .token(JwtToken)
+                .prenom(user.getPrenom())
+                .id( user.getId())
                 .refreshToken(refreshToken)
                 .build();
     }
+    public AuthenticationResponse renewAccessToken(String refreshToken) {
 
+        if (jwtService.isRefreshTokenValid(refreshToken)) {
+            String email = jwtService.extractEmailFromToken(refreshToken);
+            var user = userRepository.findByEmail(email).orElseThrow();
+
+            String newAccessToken = jwtService.generateToken(user);
+            return AuthenticationResponse.builder()
+                    .token(newAccessToken)
+                    .build();
+        } else {
+
+            throw new TokenRenewalException("Impossible de renouveler le token.");
+        }
+    }
 
 
     }

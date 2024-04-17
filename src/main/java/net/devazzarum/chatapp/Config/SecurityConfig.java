@@ -33,6 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers("/loginAndAuthentification/**").permitAll()
                                 .requestMatchers("/user/createuser").permitAll()
                                 .requestMatchers("/user/login").permitAll()
+                                .requestMatchers("/reset-password/request").permitAll()
                                 .anyRequest().authenticated()
                 );
 

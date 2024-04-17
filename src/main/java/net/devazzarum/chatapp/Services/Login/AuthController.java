@@ -1,4 +1,4 @@
-package net.devazzarum.chatapp.Controller;
+package net.devazzarum.chatapp.Services.Login;
 
 import lombok.RequiredArgsConstructor;
 import net.devazzarum.chatapp.Services.Login.AuthenticationResponse;
